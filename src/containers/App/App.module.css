@@ -1,0 +1,9 @@
+.App {
+  text-align: center;
+}
+
+.App h1{
+  background-color: var(--primary-color);
+  margin: 0 ;
+  padding: 5px 0 10px 0;
+}

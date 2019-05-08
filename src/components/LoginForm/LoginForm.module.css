@@ -1,0 +1,37 @@
+
+
+.LoginForm{
+ 
+ background-color: rgb(223, 223, 233);
+ width: 220px;
+ display: grid;
+ margin: 0 auto;
+ position: relative;
+ top: 100px;
+ border-radius: 10px;
+ box-shadow: 1px 1px 1px 1px rgb(172, 172, 172);
+}
+
+.LoginForm input{
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  width: 80%;
+  margin: 5px auto;
+  
+}
+
+.LoginForm button{
+  width: 50%;
+  margin: 5px auto;
+  border: none;
+  background-color: var(--secondary-colorA-light);
+  padding: 10px;
+  border-radius: 10px;
+  color: white;
+}
+
+.LoginForm button:hover{
+  cursor: pointer;
+  background-color: var(--secondary-colorA);
+}
