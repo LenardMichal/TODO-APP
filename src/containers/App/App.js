@@ -16,7 +16,7 @@ function App() {
   //Save to sessionStorage
   useEffect(() => {
     if (credentialState) {
-      sessionStorage.setItem('login', credentialState.login);
+      localStorage.setItem('login', credentialState.login);
       sessionStorage.setItem('pwd', credentialState.pwd);
     }
   }, [credentialState]);
@@ -25,28 +25,17 @@ function App() {
   useEffect(() => {
     if (
       credentialState === null &&
-      sessionStorage.getItem('login') &&
+      localStorage.getItem('login') &&
       sessionStorage.getItem('pwd')
     ) {
-      console.log('it works here');
-      const login = sessionStorage.getItem('login');
+      const login = localStorage.getItem('login');
       const pwd = sessionStorage.getItem('pwd');
-
+      // console.log(credentialState);
       setCredentialState({ login, pwd });
     }
-  }, [credentialState]);
-
-  //Fetch from server
-  useEffect(() => {
-    if (credentialState) {
-      updateViewHandler();
-    }
     // eslint-disable-next-line
-  }, [credentialState]);
+  }, []);
 
-  function loginHandler(credential) {
-    setCredentialState(credential);
-  }
   //Function that updates render view with fetched data
   async function updateViewHandler() {
     try {
@@ -56,6 +45,25 @@ function App() {
       console.log(err);
     }
   }
+
+  //Function for updates
+  function updateData() {
+    // console.log(credentialState, dataState);
+    if (credentialState || dataState) {
+      // console.log('inside condition block');
+      updateViewHandler();
+    }
+  }
+  //Fetch from server
+  useEffect(() => {
+    updateData();
+    // eslint-disable-next-line
+  }, [credentialState]);
+
+  //useEffect for fetching each 5secs.
+  // useEffect(() => {
+  //   setInterval(updateData, 1000);
+  // }, []);
 
   //Makes done true for selected element
   function taskDoneHandler(id) {
@@ -67,15 +75,33 @@ function App() {
   }
 
   //Adds new task to list
-  function addTaskHandler(task) {
-    const state = Object.assign({}, dataState);
-    const newTask = {
-      content: task.content,
-      user: task.user,
-    };
-    state.todo.unshift(newTask);
+  async function addTaskHandler(task) {
+    try {
+      const state = Object.assign({}, dataState);
+      const newTask = {
+        content: task.content,
+        user: task.user,
+      };
+      state.todo.unshift(newTask);
+      let updatedState = await updateRequest(state);
+      setDataState(updatedState);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  //Function that cleanup list
+  async function cleanupListHandler() {
+    let state = Object.assign({}, dataState);
+    let notDoneTasks = state.todo.filter(element => element.done === false);
+    state.todo = notDoneTasks;
+    setDataState(state);
     updateRequest(state);
-    updateViewHandler();
+  }
+
+  //Login handler for any future purposes
+  function loginHandler(credential) {
+    setCredentialState(credential);
   }
 
   //Rerender based on dataState
@@ -87,6 +113,7 @@ function App() {
         todoList={dataState}
         taskDone={taskDoneHandler}
         addTask={addTaskHandler}
+        cleanupList={cleanupListHandler}
       />
     );
   }
@@ -94,7 +121,8 @@ function App() {
   return (
     <div className={classes.App}>
       <h1>TODO App</h1>
-      <section>{view}</section>
+
+      {view}
     </div>
   );
 }

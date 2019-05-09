@@ -35,3 +35,18 @@
   cursor: pointer;
   background-color: var(--secondary-colorA);
 }
+
+.disclaimer h1{
+  background-color: rgb(223, 223, 233) !important;
+  border-radius: 10px;
+}
+
+.disclaimer{
+  position: relative;
+  top: 120px;
+  padding: 10px;
+  background-color: rgb(223, 223, 233);
+  border-radius: 10px;
+  width: 90%;
+  margin: 0 auto;
+}

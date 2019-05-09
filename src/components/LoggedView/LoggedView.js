@@ -9,11 +9,10 @@ const LoggedView = props => {
     if (el.done === true) {
       doneStyle = classes.doneStyle;
     }
-
     return (
       <li key={el._id} className={doneStyle}>
         <span>{el.content}</span>
-        <span>{el.user}</span>
+        <span title={el.date}>{el.user}</span>
         <button value={el._id} onClick={e => props.taskDone(e.target.value)}>
           DONE
         </button>
@@ -21,11 +20,20 @@ const LoggedView = props => {
     );
   });
 
+  //Handler for logout!
+  function logoutHandler() {
+    sessionStorage.removeItem('pwd');
+    window.location.reload();
+  }
+
   return (
     <Fragment>
-      <h2>DB name: {props.todoList.login}</h2>
-      <InputTodo addTask={props.addTask} />
-      <ul className={classes.LoggedView}>{list}</ul>;
+      <div className={classes.box}>
+        <h2>DB name: {props.todoList.login}</h2>
+        <button onClick={logoutHandler}>Logout!</button>
+      </div>
+      <InputTodo addTask={props.addTask} cleanupList={props.cleanupList} />
+      <ul className={classes.LoggedView}>{list}</ul>
     </Fragment>
   );
 };
